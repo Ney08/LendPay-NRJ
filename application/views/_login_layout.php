@@ -90,9 +90,7 @@
                                         
                                         <button type="submit" class="btn btn-danger btn-user btn-login btn-block">
                                             Iniciar sesión
-                                        </button>
-
-                                        
+                                        </button>   
         
                                     </form>
                                 </div>
