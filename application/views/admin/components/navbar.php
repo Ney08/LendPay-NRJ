@@ -139,7 +139,7 @@
             </div>
             <div>
               <div class="small text-gray-500" >Recordatorio</div>
-              <span class="font-weight-bold">El cliente ' . $name .' tiene un saldo pendiente de '. $fee . ' DOP pagar hoy ' . $currentDate . '</span>
+              <span class="font-weight-bold">El cliente ' . $name .' tiene un saldo pendiente de '. $fee . ' DOP para pagar hoy ' . $currentDate . '</span>
             </div>
             </a>';
           } 
