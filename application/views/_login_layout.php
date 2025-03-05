@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
+    <link rel="shortcut icon" href="<?php echo site_url() ?>/assets/img/favicon.ico"/>
     <meta name="author" content="">
 
     <title>LendPay NRJ - Login</title>
@@ -20,11 +21,9 @@
     <!-- Custom styles for this template-->
     <link href="<?php echo site_url() ?>assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="<?php echo site_url() ?>assets/css/style.css" rel="stylesheet">
-
 </head>
 
 <body class="bg-gradient-light">
-
     <div class="container  ">
         
         <!-- Outer Row -->
