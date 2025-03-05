@@ -44,52 +44,6 @@ class clients_m extends MY_Model {
         return $client;
     }
 
-    public function dni_exists($dni, $id = null) {
-        $this->db->where('dni', $dni);
-        if ($id) {
-            $this->db->where('id !=', $id);
-        }
-        $query = $this->db->get($this->_table_name);
-        return $query->num_rows() > 0;
-    }
-    public function get_provincia() {
-        
-        return $this->db->get('provincias')->result();
-    }
-
-    public function get_editMunicipio($prov_id){
-        $this->db->where('provincia_id', $prov_id);
-        return $this->db->get('municipios')->result();
-    }
-
-  public function get_editSector($mp_id){
-        $this->db->where('municipio_id', $mp_id);
-        return $this->db->get('sectores')->result();
-  }
-
-
-    public function get_municipio($prov_id) {
-        $this->db->where('provincia_id', $prov_id);
-        
-        $query = $this->db->get('municipios');
-        $output1 = '<option value="0">Seleccione el municipio</option>';
-        foreach ($query->result() as $row) {
-            $output1 .= '<option value="' . $row->id . '">' . $row->name . '</option>';
-        }
-        
-        return $output1;
-    }
-
-    public function get_sector($mp_id) {
-        $this->db->where('municipio_id', $mp_id);
-        
-        $query = $this->db->get('sectores');
-        $output1 = '<option value="0">Seleccione el sector</option>';
-        foreach ($query->result() as $row) {
-            $output1 .= '<option value="' . $row->id . '">' . $row->name . '</option>';
-        }
-        
-        return $output1;
-    }
+   
 
 }
