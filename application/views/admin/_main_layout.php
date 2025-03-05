@@ -41,17 +41,7 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
-                <?php $this->load->view('admin/components/navbar'); ?>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                  <?php $this->load->view($subview); ?>
-
-                </div>
-                <!-- /.container-fluid -->
+               
 
             </div>
             <!-- End of Main Content -->
