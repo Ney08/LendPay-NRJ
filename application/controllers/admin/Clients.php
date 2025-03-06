@@ -70,7 +70,12 @@ class Clients extends CI_Controller {
         echo $this ->clients_m->get_sector($mp_id);
     }
     
-    
+    public function ajax_checkDni() {
+        $dni = $this->input->post('dni');
+        $id = $this->input->post('id'); // Optional: Pass the client ID to exclude it from the check
+        $exists = $this->clients_m->dni_exists($dni, $id);
+        echo json_encode(['exists' => $exists]);
+    }
     
 }
 

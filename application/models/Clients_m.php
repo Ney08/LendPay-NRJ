@@ -44,7 +44,14 @@ class clients_m extends MY_Model {
         return $client;
     }
 
-    
+    public function dni_exists($dni, $id = null) {
+        $this->db->where('dni', $dni);
+        if ($id) {
+            $this->db->where('id !=', $id);
+        }
+        $query = $this->db->get($this->_table_name);
+        return $query->num_rows() > 0;
+    }
     public function get_provincia() {
         
         return $this->db->get('provincias')->result();
