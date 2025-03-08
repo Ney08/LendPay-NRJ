@@ -96,64 +96,24 @@
         
         // Get the current date
         $currentDate = date("Y-m-d");
-        //$currentDate1 = date("Y-m-d", strtotime
-        // ($currentDate));
-        // // Add a daily notification if the current date is the 15th of the month
-        // if (date('d') == 15) {
-        //   echo '<a class="dropdown-item d-flex align-items-center" href="#">
-        //   <div class="mr-3">
-        //     <div class="icon-circle bg-light">
-        //       <i class="fas fa-calendar-day text-white"></i>
-        //     </div>
-        //   </div>
-        //   <div>
-        //     <div class="small text-gray-500">' . $currentDate . '</div>
-        //     <span class="font-weight-bold">Hoy es 15 del mes. Recuerda revisar los pagos pendientes!</span>
-        //   </div>
-        //   </a>';
-        // }
-        
-        // get date from tables loan_items
-        $this->db->select("li.id, c.dni, li.date, l.client_id, concat(c.first_name,' ',c.last_name) AS name_cst, l.id AS loan_id, li.pay_date, li.num_quota, li.fee_amount");
-        $this->db->from('loan_items li');
-        $this->db->join('loans l', 'l.id = li.loan_id', 'left');
-        $this->db->join('clients c', 'c.id = l.client_id', 'left');
-        $this->db->where('li.status', 1);
-        $this->db->order_by('li.pay_date', 'desc');
-        $query = $this->db->get();
-
-        
-        foreach ($query->result() as $row) {
-          $date = $row->date;
-          $name = $row ->name_cst;
-          $fee = $row->fee_amount;
-          
-          if ($date == $currentDate) {
-            global $notificationCount;
-            $notificationCount++;
-            echo '<a class="dropdown-item d-flex align-items-center" href="#">
-            <div class="mr-3">
-              <div class="icon-circle bg-light">
-                <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
-              </div>
+        $currentDate1 = date("Y-m-d", strtotime
+        ($currentDate));
+        // Add a daily notification if the current date is the 15th of the month
+        if (date('d') == 15) {
+          echo '<a class="dropdown-item d-flex align-items-center" href="#">
+          <div class="mr-3">
+            <div class="icon-circle bg-light">
+              <i class="fas fa-calendar-day text-white"></i>
             </div>
-            <div>
-              <div class="small text-gray-500" >Recordatorio</div>
-              <span class="font-weight-bold">El cliente ' . $name .' tiene un saldo pendiente de '. $fee . ' DOP para pagar hoy ' . $currentDate . '</span>
-            </div>
-            </a>';
-          } 
-        } 
-        if ($notificationCount > 0) {
-          echo '<script>
-            document.addEventListener("DOMContentLoaded", function() {
-              const alertLink = document.querySelector("#alertsDropdown");
-              if (alertLink) {
-                alertLink.innerHTML += `<span class="badge badge-danger badge-counter">' . $notificationCount . '+</span>`;
-              }
-            });
-          </script>';
+          </div>
+          <div>
+            <div class="small text-gray-500">' . $currentDate . '</div>
+            <span class="font-weight-bold">Hoy es 15 del mes. Recuerda revisar los pagos pendientes!</span>
+          </div>
+          </a>';
         }
+        
+        
   
         // Add a monthly notification if the current date is the last day of the month
         // if (date('Y-m-d') == date('Y-m-t')) { // 'Y-m-t' gives the last day of the current month
