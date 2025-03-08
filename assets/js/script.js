@@ -144,7 +144,100 @@ $(document).ready(function () {
 	// 	});
 	// });
 
-	
+	var callback_cobranza = function () {
+		var dni_c = $("#dni_c").val();
+
+		if (dni_c == "") {
+			alert("ingresar dni");
+			return false;
+		} else {
+			$.post(
+				base_url + "admin/payments/ajax_searchCst/",
+				{ dni: dni_c },
+				function (data) {
+					console.log("sin parse", data);
+
+					data = JSON.parse(data);
+
+					console.log("con parse", data);
+
+					if (data.cst == null) {
+						$("#dni_c").val("");
+						$("#dni_cst").val("");
+						$("#name_cst").val("");
+						$("#credit_amount").val("");
+						$("#payment_m").val("");
+						$("#coin").val("");
+
+						alert("No existe el cliente o no tiene prestamo");
+						// $("#quotas").html("<tr><td colspan='5'>No hay cuotas disponibles</td></tr>");
+						//eliminar la tabla antes de crearla de nuevo
+						$("#quotas").dataTable().fnClearTable();
+						$("#quotas").dataTable().fnDraw();
+						$("#quotas").dataTable().fnDestroy();
+						
+
+				
+					// no mostrar los registros del prestamo pagado
+					} else if (data.cst.loan_status == "0") {
+						$("#dni_c").val("");
+						alert("El cliente no tiene cuotas pendientes");
+						$("#dni_cst").val("");
+						$("#name_cst").val("");
+						$("#credit_amount").val("");
+						$("#payment_m").val("");
+						$("#coin").val("");
+						// $("#quotas").html("<tr><td colspan='5'>No hay cuotas disponibles</td></tr>");
+						//eliminar la tabla antes de crearla de nuevo
+						$("#quotas").dataTable().fnClearTable();
+						$("#quotas").dataTable().fnDraw();
+						$("#quotas").dataTable().fnDestroy();
+					} else {
+						console.log('existe el cliente', data.cst.dni)
+						$("#dni_c").val("");
+						$("#dni_cst").val(data.cst.dni);
+						$("#name_cst").val(data.cst.cst_name);
+						$("#client_id").val(data.cst.client_id);
+						$("#loan_id").val(data.cst.loan_id);
+						$("#credit_amount").val(data.cst.credit_amount);
+						$("#payment_m").val(data.cst.payment_m);
+						$("#coin").val(data.cst.coin_name);
+
+						// clear the table before populating it with more data
+						//$("#quotas").html("");
+						$("#quotas").dataTable().fnClearTable();
+						$("#quotas").dataTable().fnDraw();
+						$("#quotas").dataTable().fnDestroy();
+						// hacer un for
+						$("#quotas").dataTable({
+							bPaginate: false, //Ocultar paginación
+							scrollY: "50vh",
+							scrollCollapse: true,
+							aaData: data[0],
+						});
+
+						$("input:checkbox").on("change", function () {
+							// console.log('chand', $(this).val())
+							var total = 0;
+							$("input:checkbox:enabled:checked").each(function () {
+								total += isNaN(parseFloat($(this).attr("data-fee")))
+									? 0
+									: parseFloat($(this).attr("data-fee"));
+							});
+
+							$("#total_amount").val(total);
+
+							if (total != 0) {
+								$("#register_loan").attr("disabled", false);
+							} else {
+								$("#register_loan").attr("disabled", true);
+							}
+						});
+					}
+				}
+			);
+		}
+	};
 
 	$("#dni_c").keypress(function (e) {
 		if (e.which == 13) callback_cobranza();
@@ -223,6 +316,4 @@ $(document).ready(function () {
 		}
 	});
 });
-
-// this function is to print the credits report
 
