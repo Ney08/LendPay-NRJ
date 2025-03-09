@@ -97,5 +97,129 @@ class Reports extends CI_Controller {
         $this->load->view('admin/_main_layout', $data);
     }
 
+    public function client_pdf($client_id)
+  {
+    require_once APPPATH.'third_party/fpdf183/html_table.php';
+
+    $reportCst = $this->reports_m->get_reportLC($client_id);
+    //print_r($reportCst[0]->client_name);
+
+    $pdf = new PDF();
+    $pdf->AddPage('P','A4',0);
+    $pdf->SetFont('Arial','B',13);
+    $pdf->Ln(7);
+    $pdf->Cell(0,0,'Reporte de prestamos por cliente - '.$reportCst[0]->client_name,0,1,'C');
+
+    $pdf->Ln(8);
   
+    $pdf->SetFont('Arial','',10);
+
+    foreach ($reportCst as $rc) {
+
+    $html = '<table border="0">
+    <tr>
+    <td width="120" height="30"><b>Monto credito:</b></td><td width="400" height="30">'.$rc->credit_amount.'</td><td width="120" height="30"><b>Numero Credito:</b></td><td width="55" height="30">'.$rc->id.'</td>
+    </tr>
+    <tr>
+    <td width="120" height="30"><b>Interes credito:</b></td><td width="400" height="30">'.$rc->interest_amount.' %</td><td width="120" height="30"><b>Forma pago:</b></td><td width="55" height="30">'.$rc->payment_m.'</td>
+    </tr>
+    <tr>
+    <td width="120" height="30"><b>Nro cuotas:</b></td><td width="400" height="30">'.$rc->num_fee.'</td><td width="120" height="30"><b>Fecha credito:</b></td><td width="55" height="30">'.$rc->date.'</td>
+    </tr>
+    <tr>
+    <td width="120" height="30"><b>Monto cuota:</b></td><td width="400" height="30">'.$rc->fee_amount.'</td><td width="120" height="30"><b>Estado credito:</b></td><td width="55" height="30">'.($rc->status ? "Pendiente" : "Cancelado").'</td>
+    </tr>
+    <tr>
+    <td width="120" height="30"><b>Tipo moneda:</b></td><td width="400" height="30">'.$rc->name.'('.$rc->short_name.')</td><td width="120" height="30"><b></b></td><td width="55" height="30"></td>
+    </tr>
+    </table>';
+
+    $pdf->WriteHTML($html);
+
+    $pdf->Ln(7);
+    $pdf->SetFont('Arial','',10);
+
+    $html1 = '';
+    $html1 .=                 '<table border="1">
+                    <tr>
+                    <td width="120" height="30"><b>Nro Cuota</b></td><td width="120" height="30"><b>Fecha pago</b></td><td width="120" height="30"><b>Total pagar</b></td><td width="120" height="30"><b>Estado</b></td>
+                    </tr>';
+
+    $loanItems = $this->reports_m->get_reportLI($rc->id);
+    foreach ($loanItems as $li) {
+      $html1 .= '
+                    <tr>
+                    <td width="120" height="30">'.$li->num_quota.'</td><td width="120" height="30">'.$li->date.'</td><td width="120" height="30">'.($li->status ? $li->fee_amount : "0.00").'</td><td width="120" height="30">'.($li->status ? "Pendiente" : "Cancelado").'</td>
+                    </tr>';
+    }
+
+    $html1 .= '</table>';
+
+    $pdf->WriteHTML($html1);
+
+    $pdf->Ln(7);
+
+    }
+
+    $pdf->Output('reporte_global_cliente.pdf', 'I');
+  }
+
+
+  public function general_summary_pdf()
+  {
+    require_once APPPATH.'third_party/fpdf183/html_table.php';
+
+    $coin_id = $this->input->get('coin_type');
+    if (!$coin_id) {
+      show_error('Tipo de moneda no especificado.', 400);
+    }
+
+    $coin = $this->coins_m->get($coin_id);
+    if (!$coin) {
+      show_error('Moneda no encontrada.', 404);
+    }
+
+    $summary = $this->reports_m->get_reportLoan($coin_id);
+
+    $pdf = new PDF();
+    $pdf->AddPage('P', 'A4', 0);
+    $pdf->SetFont('Arial', 'B', 13);
+    $pdf->Ln(7);
+    $pdf->Cell(0, 0, 'Resumen de Prestamos - ' . $coin->name . ' (' . strtoupper($coin->short_name) . ')', 0, 1, 'C');
+    $pdf->Ln(8);
+
+    $pdf->SetFont('Arial', '', 10);
+
+    $html = '<table border="0">
+    <tr>
+    <td width="120" height="30"><b>Tipo de moneda:</b></td><td width="400" height="30">'.$coin->name.' ('.strtoupper($coin->short_name).')</td>
+    </tr>
+    </table>';
+
+    $pdf->WriteHTML($html);
+    $pdf->Ln(7);
+
+    $html1 = '<table border="1">
+    <tr>
+    <td width="200" height="30"><b>Descripcion Total </b></td><td width="200" height="30"><b>Cantidad</b></td>
+    </tr>
+    <tr>
+    <td width="200" height="30">Credito</td><td width="200" height="30">'.(!empty($summary[0]->sum_credit) ? $summary[0]->sum_credit : 0).'</td>
+    </tr>
+    <tr>
+    <td width="200" height="30">Credito Interes</td><td width="200" height="30">'.(!empty($summary[1]->cr_interest) ? $summary[1]->cr_interest : 0).'</td>
+    </tr>
+    <tr>
+    <td width="200" height="30">Credito cancelado interes</td><td width="200" height="30">'.(!empty($summary[2]->cr_interestPaid) ? $summary[2]->cr_interestPaid : 0).'</td>
+    </tr>
+    <tr>
+    <td width="200" height="30">Credito x cobrar interes</td><td width="200" height="30">'.(!empty($summary[3]->cr_interestPay) ? $summary[3]->cr_interestPay : 0).'</td>
+    </tr>
+    </table>';
+
+    $pdf->WriteHTML($html1);
+    $pdf->Ln(10);
+
+    $pdf->Output('resumen_prestamos_' . strtolower($coin->short_name) . '.pdf', 'I');
+  }
 }
