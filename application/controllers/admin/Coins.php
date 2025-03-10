@@ -9,7 +9,7 @@ class Coins extends CI_Controller {
         $this->load->model('Coins_m', 'coins_m');
         $this->load->library('session');
         $this->load->library('form_validation');
-        $this->session->userdata('loggedin') == TRUE || redirect('user/login');
+        
     }
 
     public function index() {

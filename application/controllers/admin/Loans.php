@@ -9,7 +9,7 @@ class Loans extends CI_Controller {
         $this->load->model('loans_m'); // Ensure the model is loaded correctly
         $this->load->library('session');
         $this->load->library('form_validation'); // Load the input library
-        $this->session->userdata('loggedin') == TRUE || redirect('user/login');
+        
     }
 
     public function index(){

@@ -9,7 +9,7 @@ class Payments extends CI_Controller {
         $this->load->model('payments_m');
         $this->load->library('form_validation');
         $this->load->library('session');
-        $this->session->userdata('loggedin') == TRUE || redirect('user/login');
+        
     }
 
     public function index() {
