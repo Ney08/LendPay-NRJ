@@ -35,7 +35,39 @@ class Reports_m extends CI_Model {
         return $this->db->get('coins')->row();
     }
 
-   
+    public function get_reportDates($coin_id, $start_date, $end_date){
+        $this->db->select("id, date, credit_amount, interest_amount, num_fee, payment_m,
+     (num_fee*fee_amount) AS total_int, status");
+        $this->db->from('loans');
+        $this->db->where('coin_id', $coin_id);
+        $this->db->where("date BETWEEN '{$start_date}' AND '{$end_date}'");
+
+        return $this->db->get()->result();
+    }
+
+    public function get_reportCsts(){
+        $this->db->select("id, dni, CONCAT(first_name, ' ',last_name) AS client");
+        $this->db->from('clients');
+        $this->db->where('loan_status', 1);
+
+        return $this->db->get()->result();
+    }
+
+    public function get_reportLC($client_id){
+        $this->db->select("l.*, CONCAT(c.first_name, ' ', c.last_name) AS client_name, co.short_name, co.name");
+        $this->db->from('loans l');
+        $this->db->join('clients c', 'c.id = l.client_id', 'left');
+        $this->db->join('coins co', 'co.id = l.coin_id', 'left');
+        $this->db->where('l.client_id', $client_id);
+
+        return $this->db->get()->result();
+    }
+
+    public function get_reportLI($loan_id){
+        $this->db->where('loan_id', $loan_id);
+
+        return $this->db->get('loan_items')->result();
+    }
 
     
 
