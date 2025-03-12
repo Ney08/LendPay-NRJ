@@ -317,3 +317,31 @@ $(document).ready(function () {
 	});
 });
 
+// this function is to print the credits report
+function imp_credits(imp1) {
+	var printContents = document.getElementById("imp1").innerHTML;
+	w = window.open();
+	w.document.write(printContents);
+	w.print();
+	
+}
+
+function reportPDF() {
+	var start_d = $("#start_d").val();
+	var end_d = $("#end_d").val();
+	var coin_t = $("#coin_type2").val();
+
+	if (start_d == "" || end_d == "") {
+		alert("ingrese las fechas");
+	} else {
+		window.open(
+			base_url +
+				"admin/reports/dates_pdf/" +
+				coin_t +
+				"/" +
+				start_d +
+				"/" +
+				end_d
+		);
+	}
+}

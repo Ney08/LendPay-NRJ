@@ -20,36 +20,6 @@ class Coins extends CI_Controller {
     }
 
     //function to edit a coin
-    public function edit( $id = null ) {
-        if($id) {
-            $data['coin'] = $this->coins_m->get($id);
-            $data['coin'] || show_404();
-        } else {
-            $data['coin'] = $this->coins_m->get_new();
-        }
-
-        $rules = $this->coins_m->coin_rules;
-
-        $this->form_validation->set_rules($rules);
-
-        if($this->form_validation->run() == true) {
-            $coin_data = $this->coins_m->array_from_post(array('name', 'short_name', 'symbol', 'description'));
-            $this->coins_m->save($coin_data, $id);
-
-            if(isset($coin_data['id'])) {
-                $this->session->set_flashdata('msg', 'La moneda ha sido actualizada');
-            } else {
-                $this->session->set_flashdata('msg', 'La moneda ha sido creada');
-            }
-
-            redirect('admin/coins');
-        } else {
-            $data['subview'] = 'admin/coins/edit';
-            $this->load->view('admin/_main_layout', $data);
-        }
-
-        
-
-    }
+    
     
 }
