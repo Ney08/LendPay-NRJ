@@ -23,7 +23,15 @@ class Coins_m extends MY_Model {
         ),
     );
 
-    
+    public function get_new() {
+        $coin = new stdClass();
+        $coin->name = '';
+        $coin->short_name = '';
+        $coin->symbol = '';
+        $coin->description = '';
+
+        return $coin;
+    }
 
     
 }
