@@ -22,9 +22,7 @@ class Payments_m extends CI_Model
         $this->db->join('coins co', 'co.id = l.coin_id', 'left');
         $this->db->where(['c.loan_status' => 1, 'c.dni' => $dni]);
         // select only the loan that is active
-        $this->db->where('l.status', 1);
         
-        return $this->db->get()->row();
     }
 
     public function get_quotasCst($loan_id){

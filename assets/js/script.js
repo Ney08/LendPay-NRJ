@@ -187,11 +187,9 @@ $(document).ready(function () {
 						$("#credit_amount").val("");
 						$("#payment_m").val("");
 						$("#coin").val("");
-						// $("#quotas").html("<tr><td colspan='5'>No hay cuotas disponibles</td></tr>");
+						$("#quotas").html("<tr><td colspan='5'>No hay cuotas disponibles</td></tr>");
 						//eliminar la tabla antes de crearla de nuevo
-						$("#quotas").dataTable().fnClearTable();
-						$("#quotas").dataTable().fnDraw();
-						$("#quotas").dataTable().fnDestroy();
+						
 					} else {
 						console.log('existe el cliente', data.cst.dni)
 						$("#dni_c").val("");
