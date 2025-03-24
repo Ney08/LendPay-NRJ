@@ -10,6 +10,24 @@ class Dashboard extends CI_Controller {
         $this->session->userdata('loggedin') == TRUE || redirect('user/login');
     }
 
-    
+    public function index(){
+        $data['qCts'] = $this->config_m->get_countCts();
+        $data['qLoans'] = $this->config_m->get_countLoans();
+        $data['qPaids'] = $this->config_m->get_countPaids();
+
+        $count_lc = $this->config_m->get_countLC();
+
+        $data_lc = [];
+
+        foreach ($count_lc as $row) {
+            $data_lc['label'][] = $row->name;
+            $data_lc['data'][] = (int) $row->total;
+        }
+
+        $data['countLC'] = json_encode($data_lc);
+
+        $data['subview'] = 'admin/index';
+        $this->load->view('admin/_main_layout', $data);
+    }
 
 }
