@@ -9,7 +9,7 @@ class Clients extends CI_Controller {
         $this->load->model('Clients_m', 'clients_m');
         $this->load->library('form_validation');
         $this->load->library('session');
-        
+        $this->session->userdata('loggedin') == TRUE || redirect('user/login');
 
     }
 
