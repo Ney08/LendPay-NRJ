@@ -9,7 +9,7 @@ class Loans extends CI_Controller {
         $this->load->model('loans_m'); // Ensure the model is loaded correctly
         $this->load->library('session');
         $this->load->library('form_validation'); // Load the input library
-        
+        $this->session->userdata('loggedin') == TRUE || redirect('user/login');
     }
 
     public function index(){
@@ -45,7 +45,23 @@ class Loans extends CI_Controller {
                 DatePeriod::EXCLUDE_START_DATE
             );
 
-           
+            $num_quota = 1;
+
+            foreach ($period as $date) {
+                //echo $date->format('Y-m-d');
+                $items[] = array(
+                    'date' => $date->format('Y-m-d'),
+                    'num_quota' => $num_quota++,
+                    'fee_amount' => $this->input->post('fee_amount')
+                );
+            }
+
+            $loan_data = $this->loans_m->array_from_post(['client_id', 'credit_amount', 'interest_amount', 'num_fee', 'fee_amount', 'payment_m', 'coin_id', 'date']);
+
+            if ($this->loans_m->add_loan($loan_data, $items)) {
+
+                $this->session->set_flashdata('msg', 'Prestamo agregado correctamente');
+            }
 
             redirect('admin/loans');
         }
