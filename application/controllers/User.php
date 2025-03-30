@@ -15,6 +15,7 @@ class User extends CI_Controller {
     public function login(){
     $dashboard = 'admin/dashboard';
     $this->user_m->loggedin() == FALSE || redirect($dashboard);
+
     $rules = $this->user_m->rules;
     $this->form_validation->set_rules($rules);
 

@@ -16,6 +16,7 @@ class User_m extends MY_Model {
       'rules' => 'trim|required'
     )
   );
+
     // this function this function login is used to check if the user is registered in the database
     public function login() {
         $user = $this->get_by(array(

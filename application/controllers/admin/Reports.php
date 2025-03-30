@@ -10,7 +10,7 @@ class Reports extends CI_Controller {
         $this->load->model('reports_m');
         $this->load->library('session');
         $this->load->helper('url');
-        
+        $this->session->userdata('loggedin') == TRUE || redirect('user/login');
         
     }
 
