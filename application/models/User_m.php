@@ -7,12 +7,12 @@ class User_m extends MY_Model {
     public $rules = array(
     'email' => array(
       'field' => 'email',
-      'label' => 'Email',
+      'label' => 'email',
       'rules' => 'trim|required|valid_email'
     ),
     'password' => array(
       'field' => 'password',
-      'label' => 'Contraseña',
+      'label' => 'contraseña',
       'rules' => 'trim|required'
     )
   );

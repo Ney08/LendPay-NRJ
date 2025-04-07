@@ -9,7 +9,7 @@ class clients_m extends MY_Model {
     public $clients_rules = array(
         array(
             'field' => 'dni',
-            'label' => 'dni',
+            'label' => 'cédula',
             'rules' => 'trim|required'
         ),
         array(
